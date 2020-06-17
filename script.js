@@ -14,8 +14,7 @@ startQuiz.addEventListener('click', function(){
 
     //countdown 
     var time = setInterval(function(){
-        timerId.innerHTML= 'Time: ' + timerCount; 
-        buildQuiz(); 
+        timerId.innerHTML= 'Time: ' + timerCount;  
         timerCount--; 
 
         if (timerCount < 0){   
@@ -23,6 +22,8 @@ startQuiz.addEventListener('click', function(){
         }
 
     }, 1000);  
+
+    buildQuiz(); 
 })
 
 

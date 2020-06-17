@@ -36,25 +36,61 @@ var questions = [
   ];
 
 function buildQuiz(){ 
+  //gets quiz display div 
   var quizDisplayId = document.querySelector('#quiz-display'); 
 
   //for(var i = 0; i < questions.length; i++){ 
 
+  //creates new element for question title 
   var questionTitle = document.createElement('h2'); 
 
   questionTitle.textContent = questions[0].title; 
   quizDisplayId.append(questionTitle); 
 
     
-  for(var i = 0; i < questions[0].choices.length; i++){ 
-      
-    var questionChoices = document.createElement('button'); 
-    //
-    questionChoices.textContent = questions[0].choices[i]; 
+    for(var x = 0; x < questions[0].choices.length; x++){ 
 
-    quizDisplayId.append(questionChoices); 
+      //makes each choices a button 
+      var ansChoice = document.createElement('button'); 
+
+      //adds content from questions array to button
+      ansChoice.textContent = questions[0].choices[x]; 
+
+      ansChoice.setAttribute('id', 'answer-choice'); 
+
+      //adds button to quiz display div
+      quizDisplayId.append(ansChoice); 
   }
 
-  
-
+  getResults(); 
 } 
+
+function getResults(){ 
+
+//gets answer display div 
+var ansId = document.querySelector('#answer-display');
+
+var button = document.getElementById('#answer-choice')
+
+//when user clicks a button
+button.addEventListener('click', function(){ 
+
+  //if correct answer, display correct
+  if (button.textContent == questions[0].answer){  
+
+    var correctAns = document.createElement('h3'); 
+    correctAns.textContent = 'correct'; 
+    ansId.append(correctAns); 
+
+  }
+
+  //if user chooses the wrong answer, displays wrong
+  else{ 
+
+    var wrongAns = document.createElement('h3'); 
+    wrongAns.textContent = 'wrong'; 
+    ansId.append(wrongAns); 
+  }
+
+}); 
+}
