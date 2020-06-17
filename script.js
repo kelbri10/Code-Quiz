@@ -23,7 +23,9 @@ startQuiz.addEventListener('click', function(){
 
     }, 1000);  
 
-    buildQuiz(); 
+    for(var i = 0; i < questions.length; i++){ 
+        buildQuiz(i); 
+    }
 })
 
 
