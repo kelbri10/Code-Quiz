@@ -1,3 +1,4 @@
+ 
 // list of all questions, choices, and answers
 var questions = [
     {
@@ -35,20 +36,25 @@ var questions = [
   ];
 
 function buildQuiz(){ 
-    var quizDisplayId = document.getElementById('quizDisplay'); 
+  var quizDisplayId = document.querySelector('#quiz-display'); 
 
-    for(var i = 0; i < questions.length; i++){ 
-        var quizTitle = document.getElementById('title'); 
-        quizTitle.textContent = questions.title; 
-        
-        for(var i = 0; i < choices.length; i++){ 
-            var quizChoice = document.createElement('button'); 
-            var choiceId = document.getElementById('choices'); 
+  //for(var i = 0; i < questions.length; i++){ 
 
-            quizChoice.textContent = choices[i]; 
-            choiceId.append(quizChoice); 
-        }
-    }
+  var questionTitle = document.createElement('h2'); 
 
+  questionTitle.textContent = questions[0].title; 
+  quizDisplayId.append(questionTitle); 
 
-}
+    
+  for(var i = 0; i < questions[0].choices.length; i++){ 
+      
+    var questionChoices = document.createElement('button'); 
+    //
+    questionChoices.textContent = questions[0].choices[i]; 
+
+    quizDisplayId.append(questionChoices); 
+  }
+
+  
+
+} 

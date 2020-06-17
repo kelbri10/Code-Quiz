@@ -8,7 +8,6 @@
     <title>Code Quiz</title>
 </head>
 <body>
-    <script src = "scripts.js"></script>
 
     <div id = "highscores"> 
         <a href= "highscores.html"><h2>Highscores</h2></a>
@@ -19,12 +18,18 @@
     </div>
 
     <div class = "container">
-        <div id = "quiz">
-            <h2 id = "title"></h2>
-            <h3 id = "choices"></h3>
+        <div id = "quiz-display">
+            <h1>Welcome to Code Quiz</h1>
+
+            <p> To start the quiz, click the Start button below </p>
+
+            <button id = "start-button">Start Quiz</button>
         </div>
 
-        <div id = "answer"></div>
+        <div id = "answer-display"></div>
     </div>
+
+    <script src = "script.js"></script>
+    <script src = "questions.js"></script>
 </body>
 </html>
