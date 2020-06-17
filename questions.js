@@ -63,7 +63,7 @@ function buildQuiz(i){
       //adds button to quiz display div
       quizDisplayId.append(ansChoice); 
   }
- 
+ showResults(i);
 } 
 
 function showResults(){ 
