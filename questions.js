@@ -35,47 +35,58 @@ var questions = [
     }
   ];
 
-function buildQuiz(i){ 
-  //gets quiz display div 
-  var quizDisplayId = document.querySelector('#quiz-display'); 
+function buildQuiz(){ 
 
-  //for(var i = 0; i < questions.length; i++){ 
+  //sets score to 0 
+  var score = 0; 
 
-  //creates new element for question title 
-  var questionTitle = document.createElement('h2'); 
+  var questionCounter = 0; 
 
-  questionTitle.textContent = questions[i].title; 
-  quizDisplayId.append(questionTitle); 
+  //for loop cycles through questions 
+  for (var i = 0; i < questions.length; i++){ 
 
+    //sets the quiz display div to variable quizDiv
+    var quizDiv = document.getElementById('quiz-display'); 
+
+    //sets the answer display div to variable answerDiv 
+    var answerDiv = document.getElementById('answer-display');  
     
-    for(var x = 0; x < questions[i].choices.length; x++){ 
+    //sets text content of quizDiv to title in first Question 
+    quizDiv.textContent = questions[i].title; 
 
-      //makes each choices a button 
-      var ansChoice = document.createElement('button'); 
+    //logs the choices of the first question 
+    console.log(questions[i].choices); 
 
-      //adds content from questions array to button
-      ansChoice.textContent = questions[i].choices[x]; 
+    //for loop cycles through question's choices 
+    for (var i = 0; i < questions[i].choices.length; i++){ 
 
-      ansChoice.setAttribute('id', 'answer-choice'); 
+      //creates a button in html doc 
+      var buttonDiv = document.createElement('button'); 
 
-      ansChoice.setAttribute('onclick', 'showResults()'); 
+      //sets the text of button to the choice
+      buttonDiv.textContent = questions[i].choices[i]; 
 
-      //adds button to quiz display div
-      quizDisplayId.append(ansChoice); 
+      //adds the button to html 
+      quizDiv.append(buttonDiv); 
+
+      //when user clicks the button
+      buttonDiv.addEventListener('click', function(event){
+        //sends alert that it works 
+        alert('it works'); 
+
+        //if the user clicks the right answer, the answer display says 'You got It' 
+        //adds 10 points to score 
+
+        //if the user clicks the wrong answer, the answer display says 'Sorry! Wrong answer!' 
+        //no points are added, time reduced by 10s
+      });
+
+      console.log(questions[i].answer); 
+    } 
+  
   }
- showResults(i);
+
+
+  return score; 
 } 
-
-function showResults(){ 
-  var ansId = document.querySelector('#answer-display'); 
-
-  if(ansChoice.textContent === questions[i].answer){ 
-    ansId.textContent = 'right'; 
-  }
-  else{ 
-    ansId.textContent = 'wrong'; 
-  }
-
-  setInterval(buildQuiz(), 1000); 
-}
 

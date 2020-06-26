@@ -3,29 +3,30 @@ var quizDisplayId = document.querySelector('#quiz-display');
 
 
 startQuiz.addEventListener('click', function(){ 
-
+    //empties quizDisplay div 
     quizDisplayId.innerHTML = ' ';  
 
     //timer Id pulled from html 
     var timerId = document.getElementById('timer'); 
 
     //sets timer at 60 seconds 
-    var timerCount = 60; 
+    var timerCount = 5; 
 
     //countdown 
     var time = setInterval(function(){
+        //adds html to display timer 
         timerId.innerHTML= 'Time: ' + timerCount;  
+
+        //sets timer to decrease by 1 
         timerCount--; 
-
-        if (timerCount < 0){   
-            clearInterval(time); 
-        }
-
     }, 1000);  
 
-    for(var i = 0; i < questions.length; i++){ 
-        buildQuiz(i); 
+    if (time === 0){ 
+        quizDisplayId.innerHTML = ' '; 
+        timerId.innerHTML = 'Times Up!'; 
     }
+
+    buildQuiz(); 
 })
 
 
