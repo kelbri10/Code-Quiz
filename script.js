@@ -144,36 +144,54 @@ function endQuiz(score){
   //provide input box for user to enter initials
   //the initials are set to 'initial' value in local storage 
   //when user clicks view high scores, the other entered data is pulled from local storage and displayed in browser
+  
+  //displays final score
   quizDisplayId.innerHTML = 'Your final score is: ' + score; 
 
+  //creates input box to enter intials 
   let inputBox = document.createElement('INPUT'); 
-  let initials = inputBox.value; 
+  
+  let initials = inputBox.value.trim(); 
 
+  //sets attribute of box 
   inputBox.setAttribute('initials', initials); 
 
+  //appends the input box to the browser 
   quizDisplayId.append(inputBox); 
 
+  //create save button 
   let saveButton = document.createElement('button'); 
   saveButton.innerHTML = 'Save New Score'; 
   quizDisplayId.append(saveButton); 
 
+  //create view previous score button
   let viewScore = document.createElement('button'); 
   viewScore.innerHTML = 'View Scores'; 
   quizDisplayId.append(viewScore); 
   
+  //when user clicks save button
   saveButton.addEventListener('click', function(event){ 
     event.preventDefault(); 
 
-    let user = { 
-      score = score, 
-      saveInitials = inputBox.value.trim()
+    if (initials === null){ 
+      return; 
     }
+    else{ 
+      //create a new object 
+      let newSave = { 
+        newScore: score, 
+        newInitials: initials
+      }
 
-    saves.push(user); 
+      // add user object to save array
+      saves.push(newSave); 
 
-    localStorage.setItem('last score', JSON.stringify(saves)); 
-  
-    inputBox.value = ''; 
+      //saves array to local storage to be pulled later 
+      localStorage.setItem('last score', JSON.stringify(saves)); 
+    
+      //clears inputBox 
+      inputBox.value = ''; 
+    }
 
   })
 
