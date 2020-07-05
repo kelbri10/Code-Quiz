@@ -47,6 +47,8 @@ let score= 0;
 
 let startTime = 60; 
 
+let saves = []; 
+
 //when the user clicks start, timer starts
 startQuiz.addEventListener('click', function(){  
 
@@ -163,16 +165,19 @@ function endQuiz(score){
     event.preventDefault(); 
 
     let user = { 
-      saveScore = score, 
+      score = score, 
       saveInitials = inputBox.value.trim()
     }
-    localStorage.setItem('save', JSON.stringify(user)); 
+
+    saves.push(user); 
+
+    localStorage.setItem('last score', JSON.stringify(saves)); 
   
     inputBox.value = ''; 
 
   })
 
-  viewScore.addEventListener('click'), function(event){ 
+  /*viewScore.addEventListener('click'), function(event){ 
     event.preventDefault(); 
 
     let previousScores = []
@@ -181,7 +186,7 @@ function endQuiz(score){
       let lastScore = JSON.parse(localStorage.getItem('save'));
       previousScores.push(lastScore); 
     }
-  }
+  } */
 
 
 } 
