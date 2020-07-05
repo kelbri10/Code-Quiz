@@ -1,7 +1,7 @@
  
 // list of all questions, choices, and answers
-var counter = 0;
-var questions = [
+let counter = 0;
+let questions = [
     {
       title: "Commonly used data types DO NOT include:",
       choices: ["strings", "booleans", "alerts", "numbers"],
@@ -35,15 +35,17 @@ var questions = [
       answer: "console.log"
     }
   ];
-var startQuiz = document.querySelector('#start-button'); 
+let startQuiz = document.querySelector('#start-button'); 
 
-var quizDisplayId = document.querySelector('#quiz-display'); 
+let quizDisplayId = document.querySelector('#quiz-display'); 
 
-var timeId = document.querySelector('#timer'); 
+let answerDisplayId = document.querySelector('#answer-display'); 
 
-var score= 0;
+let timeId = document.querySelector('#timer'); 
 
-var startTime = 60; 
+let score= 0;
+
+let startTime = 60; 
 
 //when the user clicks start, timer starts
 startQuiz.addEventListener('click', function(){  
@@ -71,22 +73,22 @@ startQuiz.addEventListener('click', function(){
 function buildQuiz(counter){ 
 
   //sets the quiz display div to variable quizDiv
-  var quizDiv = document.getElementById('quiz-display'); 
+  let quizDiv = document.getElementById('quiz-display'); 
 
-  //sets the answer display div to variable answerDiv 
-  var answerDiv = document.getElementById('answer-display');  
+  //sets the answer display div to letiable answerDiv 
+  let answerDiv = document.getElementById('answer-display');  
   
   //sets text content of quizDiv to title in first Question 
   quizDiv.textContent = questions[counter].title; 
 
   //sets choices to hold all question choices in array
-  var choices = questions[counter].choices; 
+  let choices = questions[counter].choices; 
 
   //for loop cycles through question's choices 
   choices.forEach(function(choice){ 
 
     //creates a button in html doc 
-    var buttonDiv = document.createElement('button'); 
+    let buttonDiv = document.createElement('button'); 
 
     //sets the text of button to the choice
     buttonDiv.textContent = choice;
@@ -103,7 +105,7 @@ function buildQuiz(counter){
 
 function checkAnswer(){
 
-      var userAns = this.getAttribute('data-ans')
+      let userAns = this.getAttribute('data-ans')
 
       //if the user clicks the right answer, the answer display says 'You got It' 
       //adds 10 points to score 
@@ -123,7 +125,7 @@ function checkAnswer(){
 
         //when counter equals lenght end the quiz
         if(counter===(questions.length-1)){
-          endQuiz();
+          endQuiz(score);
         }
         //increments the counter by 1 and then calls the counter 
         else{
@@ -133,11 +135,35 @@ function checkAnswer(){
       }  
 
 
-function endQuiz(){ 
+function endQuiz(score){
+
   //when quiz is over, user is shown an alert that time is up 
   //display total score
   //provide input box for user to enter initials
   //the initials are set to 'initial' value in local storage 
   //when user clicks view high scores, the other entered data is pulled from local storage and displayed in browser
-}
+  let newScore = document.createElement('h2'); 
+  newScore.innerHTML = 'Your final Score is: ' + score; 
+  document.append(newScore); 
+
+  quizDisplayId.innerHTML = 'Your final score is: ' + score; 
+
+  let inputBox = document.createElement('INPUT'); 
+  let initials = inputBox.value; 
+
+  inputBox.setAttribute('initials', initials); 
+
+  quizDisplayId.append(inputBox); 
+
+  let saveButton = document.createElement('button'); 
+  saveButton.innerHTML = 'Save New Score'; 
+  quizDisplayId.append(saveButton); 
+  
+  saveButton.addEventListener('click', function(event){ 
+    
+    localStorage.setItem('initials', initials); 
+
+  })
+
+} 
 
