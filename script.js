@@ -63,7 +63,7 @@ startQuiz.addEventListener('click', function(){
         timeId.innerHTML = 'Time Remaining: ' + startTime; 
     
         //ends timer at 0 when end and start equal 
-        if (startTime === endTime){ 
+        if (startTime <= endTime){ 
             clearInterval(time);  
         }
     }, 1000); 
@@ -106,7 +106,7 @@ function buildQuiz(counter){
 
 } 
 
-//once the user clicks a button, calls the checkAnswer() function 
+//once the user clicks an answer button... 
 function checkAnswer(){
 
       let userAns = this.getAttribute('data-ans')
@@ -131,7 +131,7 @@ function checkAnswer(){
         }
 
         //when counter equals lenght end the quiz
-        if(counter===(questions.length-1)){
+        if(counter===(questions.length-1)){ 
           answerDisplayId.innerHTML = ''; 
           endQuiz(score);
         }
@@ -168,7 +168,7 @@ function endQuiz(score){
   viewScore.innerHTML = 'View Scores'; 
   quizDisplayId.append(viewScore); 
   
-  //when user clicks save button
+  //when user clicks save button...
   saveButton.addEventListener('click', function(event){ 
     event.preventDefault(); 
 
@@ -201,4 +201,28 @@ function endQuiz(score){
 
     })
 
+  //when user clicks view previous scores...
+  viewScore.addEventListener('click', function(event){
+    event.preventDefault(); 
+
+    //if the user clicks when there is no previous saves 
+    if (localStorage.getItem('save') === null){
+      answerDisplayId.innerHTML = 'There are no previous scores to display!'; 
+    }
+    else{ 
+      //pulls array from local storage
+      let pastSaves = JSON.parse(localStorage.getItem('save')); 
+
+      //creates an element for each object in array 
+      for (var i = 0; i < pastSaves.length; i++){ 
+
+        //sets username and userscore to innerHTML for pastUser
+        let pastUser = document.createElement('p'); 
+        pastUser.innerHTML = pastSaves[i].username + ' ' + pastSaves[i].userScore; 
+
+        //displays in answerDisplayId
+        answerDisplayId.append(pastUser); 
+      }
+    }
+  })
 }  
