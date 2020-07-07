@@ -47,7 +47,8 @@ let score= 0;
 
 let startTime = 60; 
 
-let saves = []; 
+//creates new array 
+//let pastSaves = []; 
 
 //when the user clicks start, timer starts
 startQuiz.addEventListener('click', function(){  
@@ -68,7 +69,7 @@ startQuiz.addEventListener('click', function(){
     }, 1000); 
     
     //uses counter as parameter for buildQuiz()
-    buildQuiz(counter);
+    buildQuiz(counter); 
 });
 
 //constructs quiz question in browser
@@ -105,6 +106,7 @@ function buildQuiz(counter){
 
 } 
 
+//once the user clicks a button, calls the checkAnswer() function 
 function checkAnswer(){
 
       let userAns = this.getAttribute('data-ans')
@@ -113,6 +115,7 @@ function checkAnswer(){
       //adds 10 points to score 
       if(userAns === questions[counter].answer){
           score = score + 10; 
+          answerDisplayId.innerHTML = 'You Got It!'; 
           console.log(score); 
         }
         //if the user clicks the wrong answer, the answer display says 'Sorry! Wrong answer!' 
@@ -120,13 +123,16 @@ function checkAnswer(){
         else{  
           //decreases start 
           startTime = startTime - 10; 
+          answerDisplayId.innerHTML = 'Sorry! The correct answer is ' + questions[counter].answer + '.'; 
           if(startTime <= 0){
-            endQuiz();
+            answerDisplayId.innerHTML = ''; 
+            endQuiz(score);
           }
         }
 
         //when counter equals lenght end the quiz
         if(counter===(questions.length-1)){
+          answerDisplayId.innerHTML = ''; 
           endQuiz(score);
         }
         //increments the counter by 1 and then calls the counter 
@@ -138,26 +144,19 @@ function checkAnswer(){
 
 
 function endQuiz(score){
-
   //when quiz is over, user is shown an alert that time is up 
-  //display total score
-  //provide input box for user to enter initials
-  //the initials are set to 'initial' value in local storage 
-  //when user clicks view high scores, the other entered data is pulled from local storage and displayed in browser
-  
   //displays final score
-  quizDisplayId.innerHTML = 'Your final score is: ' + score; 
+  quizDisplayId.innerHTML = 'The Quiz is Over! Your final score is: ' + score; 
 
   //creates input box to enter intials 
   let inputBox = document.createElement('INPUT'); 
   
-  let initials = inputBox.value.trim(); 
-
   //sets attribute of box 
-  inputBox.setAttribute('initials', initials); 
+  inputBox.setAttribute('user', inputBox.value); 
 
   //appends the input box to the browser 
   quizDisplayId.append(inputBox); 
+
 
   //create save button 
   let saveButton = document.createElement('button'); 
@@ -173,39 +172,33 @@ function endQuiz(score){
   saveButton.addEventListener('click', function(event){ 
     event.preventDefault(); 
 
-    if (initials === null){ 
-      return; 
-    }
-    else{ 
-      //create a new object 
-      let newSave = { 
-        newScore: score, 
-        newInitials: initials
-      }
-
-      // add user object to save array
-      saves.push(newSave); 
-
-      //saves array to local storage to be pulled later 
-      localStorage.setItem('last score', JSON.stringify(saves)); 
-    
-      //clears inputBox 
-      inputBox.value = ''; 
+    //create a new object 
+    let save = { 
+      userScore: score, 
+      username: inputBox.value
     }
 
-  })
-
-  /*viewScore.addEventListener('click'), function(event){ 
-    event.preventDefault(); 
-
-    let previousScores = []
-
-    for (var i = 0; i < ; i++){ 
-      let lastScore = JSON.parse(localStorage.getItem('save'));
-      previousScores.push(lastScore); 
+    //checks to see if a previous save is in local storage 
+    if(localStorage.getItem('save') === null){ 
+      //creates new array if no save detected 
+       let pastSaves = []; 
+      //adds save object to array
+       pastSaves.push(save); 
+      //sets the array to local storage
+       localStorage.setItem('save', JSON.stringify(pastSaves)); 
+    } 
+    else{
+      //pulls array from localStorage
+      let pastSaves = JSON.parse(localStorage.getItem('save')); 
+      //adds save object to already existing array
+      pastSaves.push(save); 
+      //sets new arrray to localStorage
+      localStorage.setItem('save', JSON.stringify(pastSaves)); 
     }
-  } */
 
+    //clears inputBox 
+    inputBox.value = ''; 
 
-} 
+    })
 
+}  
