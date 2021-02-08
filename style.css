@@ -1,5 +1,50 @@
-.container{ 
-     margin: 0 auto; 
-     width: 1080px; 
+header { 
+     text-align: center;
 }
 
+.nav-item{ 
+     color: #41127B; 
+}
+
+.container{
+     margin: 0 auto;
+     height: 50vh;  
+     display: flex; 
+     flex-direction: column;
+     justify-content: center;
+
+     text-align: center; 
+}
+
+.quiz{ 
+     color: #382C46; 
+}
+
+.btn{ 
+     border-style: solid;  
+     border-color:#41127B; 
+     border-radius: 35em; 
+     border-width: 4px; 
+     color: black; 
+
+     margin-left: 20px; 
+     margin-right: 20px; 
+     padding: 10px 35px 10px 35px; 
+}
+
+.btn:hover{
+     cursor: pointer;
+     background-color: #DFF7F6; 
+}
+
+.timer{ 
+     margin-bottom: 50px; 
+     justify-content: center; 
+     font-size:48px; 
+     font-weight: bold; 
+     color: lightgrey;
+}
+
+.answer{ 
+     margin-top: 50px; 
+}

@@ -1,228 +1,169 @@
- 
-// list of all questions, choices, and answers
-let counter = 0;
-let questions = [
-    {
-      title: "Commonly used data types DO NOT include:",
-      choices: ["strings", "booleans", "alerts", "numbers"],
-      answer: "alerts"
-    },
-    {
-      title: "The condition in an if / else statement is enclosed within ____.",
-      choices: ["quotes", "curly brackets", "parentheses", "square brackets"],
-      answer: "parentheses"
-    },
-    {
-      title: "Arrays in JavaScript can be used to store ____.",
-      choices: [
-        "numbers and strings",
-        "other arrays",
-        "booleans",
-        "all of the above"
-      ],
-      answer: "all of the above"
-    },
-    {
-      title:
-        "String values must be enclosed within ____ when being assigned to variables.",
-      choices: ["commas", "curly brackets", "quotes", "parentheses"],
-      answer: "quotes"
-    },
-    {
-      title:
-        "A very useful tool used during development and debugging for printing content to the debugger is:",
-      choices: ["JavaScript", "terminal / bash", "for loops", "console.log"],
-      answer: "console.log"
-    }
-  ];
-let startQuiz = document.querySelector('#start-button'); 
+const startBtn = document.querySelector('.startBtn'); 
+const timer = document.querySelector('.timer'); 
+const quiz = document.querySelector('.quiz'); 
+const answer = document.querySelector('.answer'); 
 
-let quizDisplayId = document.querySelector('#quiz-display'); 
+let counter = 0; 
+let score = 0; 
+let countdown = 60; 
 
-let answerDisplayId = document.querySelector('#answer-display'); 
+//when the user clicks start
+//the timer starts 
+//if the timer hits zero, the quiz ends 
+startBtn.addEventListener('click', ()=>{
 
-let timeId = document.querySelector('#timer'); 
-
-let score= 0;
-
-let startTime = 60; 
-
-//creates new array 
-//let pastSaves = []; 
-
-//when the user clicks start, timer starts
-startQuiz.addEventListener('click', function(){  
-
-    //countdown 
-    var time = setInterval(function(){
-        
-        startTime--; 
-
-        var endTime = 0; 
-
-        timeId.innerHTML = 'Time Remaining: ' + startTime; 
-    
-        //ends timer at 0 when end and start equal 
-        if (startTime <= endTime){ 
-            clearInterval(time);  
-        }
+    //timer counts down to 0 after user starts quiz 
+    setInterval(()=>{
+        timer.innerHTML = countdown; 
+        countdown--; 
     }, 1000); 
+
+    //clears the quiz div and calls newQuiz function to display first question in array
+    quiz.innerHTML = ''; 
+    newQuiz(counter); 
+}); 
+
+//starts the quiz once user clicks start button 
+const newQuiz = (counter) => { 
+    //create h1 tag for question 
+    let newQuestion = document.createElement('h1'); 
+    newQuestion.setAttribute('class', 'question-title'); 
+
+    newQuestion.innerHTML = questions[counter].title; 
+    quiz.appendChild(newQuestion); 
+
+    //for each answer choice create a button 
+    questions[counter].choices.forEach(choice => {
+        //creates a new button for each choice  
+        let newButton = document.createElement('button'); 
+
+        newButton.setAttribute('class', 'btn answer-btn'); 
+        newButton.setAttribute('data-ans', choice); 
+
+        newButton.innerHTML = choice; 
+
+        //when user clicks on their answer choice it d
+        newButton.addEventListener('click', () => { 
+            let userAnswer = newButton.dataset.ans;
+            checkAnswer(userAnswer); 
+        }); 
+        quiz.append(newButton); 
+    });
+
+}
+
+//once the user clicks a button, compare the clicked answer to the correct answer 
+const checkAnswer = (userAnswer) => { 
+    let correctAnswer = questions[counter].answer; 
+    //checks if the users answer is the correct answer
+    //score increase by 10 if correct, decreases by 10 if incorrect 
+    if (userAnswer === correctAnswer){ 
+        score += 10; 
+        answer.innerHTML = 'Correct!';
+        quiz.innerHTML = '';
+        counter++; 
+    } else { 
+        answer.innerHTML = 'Wrong!'; 
+        quiz.innerHTML = '';
+        counter++; 
+    }
     
-    //uses counter as parameter for buildQuiz()
-    buildQuiz(counter); 
-});
-
-//constructs quiz question in browser
-function buildQuiz(counter){ 
-
-  //sets the quiz display div to variable quizDiv
-  let quizDiv = document.getElementById('quiz-display'); 
-
-  //sets the answer display div to letiable answerDiv 
-  let answerDiv = document.getElementById('answer-display');  
-  
-  //sets text content of quizDiv to title in first Question 
-  quizDiv.textContent = questions[counter].title; 
-
-  //sets choices to hold all question choices in array
-  let choices = questions[counter].choices; 
-
-  //for loop cycles through question's choices 
-  choices.forEach(function(choice){ 
-
-    //creates a button in html doc 
-    let buttonDiv = document.createElement('button'); 
-
-    //sets the text of button to the choice
-    buttonDiv.textContent = choice;
-    buttonDiv.setAttribute("data-ans",choice); 
-    buttonDiv.setAttribute("class","ans-btn");
-    buttonDiv.onclick = checkAnswer;
-
-    //adds the button to html 
-    quizDiv.append(buttonDiv); 
-
-  }); 
-
-} 
-
-//once the user clicks an answer button... 
-function checkAnswer(){
-
-      let userAns = this.getAttribute('data-ans')
-
-      //if the user clicks the right answer, the answer display says 'You got It' 
-      //adds 10 points to score 
-      if(userAns === questions[counter].answer){
-          score = score + 10; 
-          answerDisplayId.innerHTML = 'You Got It!'; 
-          console.log(score); 
-        }
-        //if the user clicks the wrong answer, the answer display says 'Sorry! Wrong answer!' 
-        //no points are added, time reduced by 10s
-        else{  
-          //decreases start 
-          startTime = startTime - 10; 
-          answerDisplayId.innerHTML = 'Sorry! The correct answer is ' + questions[counter].answer + '.'; 
-          if(startTime <= 0){
-            answerDisplayId.innerHTML = ''; 
-            endQuiz(score);
-          }
-        }
-
-        //when counter equals lenght end the quiz
-        if(counter===(questions.length-1)){ 
-          answerDisplayId.innerHTML = ''; 
-          endQuiz(score);
-        }
-        //increments the counter by 1 and then calls the counter 
-        else{
-          counter++;
-          buildQuiz(counter);
-        }
-      }  
-
-
-function endQuiz(score){
-  //when quiz is over, user is shown an alert that time is up 
-  //displays final score
-  quizDisplayId.innerHTML = 'The Quiz is Over! Your final score is: ' + score; 
-
-  //creates input box to enter intials 
-  let inputBox = document.createElement('INPUT'); 
-  
-  //sets attribute of box 
-  inputBox.setAttribute('user', inputBox.value); 
-
-  //appends the input box to the browser 
-  quizDisplayId.append(inputBox); 
-
-
-  //create save button 
-  let saveButton = document.createElement('button'); 
-  saveButton.innerHTML = 'Save New Score'; 
-  quizDisplayId.append(saveButton); 
-
-  //create view previous score button
-  let viewScore = document.createElement('button'); 
-  viewScore.innerHTML = 'View Scores'; 
-  quizDisplayId.append(viewScore); 
-  
-  //when user clicks save button...
-  saveButton.addEventListener('click', function(event){ 
-    event.preventDefault(); 
-
-    //create a new object 
-    let save = { 
-      userScore: score, 
-      username: inputBox.value
+    //checks if counter supercedes number of questions available, ends quiz if true
+    //continues quiz if more questions
+    if (counter === questions.length){ 
+        endQuiz(); 
+    } else { 
+        newQuiz(counter); 
     }
 
-    //checks to see if a previous save is in local storage 
-    if(localStorage.getItem('save') === null){ 
-      //creates new array if no save detected 
-       let pastSaves = []; 
-      //adds save object to array
-       pastSaves.push(save); 
-      //sets the array to local storage
-       localStorage.setItem('save', JSON.stringify(pastSaves)); 
-    } 
-    else{
-      //pulls array from localStorage
-      let pastSaves = JSON.parse(localStorage.getItem('save')); 
-      //adds save object to already existing array
-      pastSaves.push(save); 
-      //sets new arrray to localStorage
-      localStorage.setItem('save', JSON.stringify(pastSaves)); 
+}
+
+//once quiz ends, ask user to enter initials in order to save score 
+const endQuiz = () => { 
+    answer.innerHTML = ''; 
+    quiz.innerHTML = 'Quiz Over!'; 
+
+    //creates h1 tag with text to prompt user to enter their intials 
+    let newSaveScore = document.createElement('h1');
+    newSaveScore.setAttribute('class', 'save-score') 
+    newSaveScore.innerHTML = 'Enter your initials'; 
+
+    //creates input box for user to input initials 
+    let inputBox = document.createElement('INPUT'); 
+    inputBox.setAttribute('type', 'text'); 
+
+    //creates button for user to click to confirm save for their quiz score
+    let saveButton = document.createElement('button'); 
+    saveButton.setAttribute('class', 'btn'); 
+    saveButton.innerHTML = 'Save'; 
+
+    //
+    let viewScore = document.createElement('button'); 
+    viewScore.setAttribute('class', 'btn'); 
+    viewScore.innerHTML = 'View Scores'; 
+
+    //appends both to quiz div to display browser-side
+    quiz.append(newSaveScore, inputBox, saveButton); 
+
+    //once user clicks the save button, saves the initials input as userInitials 
+    saveButton.addEventListener('click', (e) => { 
+        e.preventDefault(); 
+        //creates new save object
+        let save = { 
+            userScore: score, 
+            username: inputBox.value
+        }
+        
+        newSave(save); 
+    
+    }); 
+
+    //when user clicks view previous scores...
+    viewScore.addEventListener('click', function(event){
+        event.preventDefault(); 
+
+        viewHighscores(); 
+  });
+}
+
+    
+const newSave = (save) => { 
+    //checks to see if there is a local storage already saved 
+    //if not creates new array for previous saves to be stored
+    if(localStorage.getItem('save') === null){
+        let pastSaves = []; 
+        pastSaves.push(save); 
+        localStorage.setItem('save', JSON.stringify(save)); 
+    }
+    //if saves are present pulls previous saves as an array, pushes new save
+    //stringifies new save 
+    else { 
+        let pastSaves = JSON.parse(localStorage.getItem('save')); 
+        pastSaves.push(save); 
+        localStorage.setItem('save', JSON.stringify(pastSaves)); 
     }
 
-    //clears inputBox 
+    //clear inputBox
     inputBox.value = ''; 
+}
 
-    })
+const viewHighscores = () => { 
+     //if the user clicks when there is no previous saves 
+     if (localStorage.getItem('save') === null){
+        answerDisplayId.innerHTML = 'There are no previous scores to display!'; 
+        }
+        else{ 
+            //pulls array from local storage
+            let pastSaves = JSON.parse(localStorage.getItem('save')); 
 
-  //when user clicks view previous scores...
-  viewScore.addEventListener('click', function(event){
-    event.preventDefault(); 
+            //creates an element for each object in array 
+            pastSaves.forEach(pastSave => {
+                //sets username and userscore to innerHTML for pastUser
+                let pastUser = document.createElement('p'); 
+                pastUser.innerHTML = pastSave.username + ' ' + pastSave.userScore; 
 
-    //if the user clicks when there is no previous saves 
-    if (localStorage.getItem('save') === null){
-      answerDisplayId.innerHTML = 'There are no previous scores to display!'; 
-    }
-    else{ 
-      //pulls array from local storage
-      let pastSaves = JSON.parse(localStorage.getItem('save')); 
-
-      //creates an element for each object in array 
-      for (var i = 0; i < pastSaves.length; i++){ 
-
-        //sets username and userscore to innerHTML for pastUser
-        let pastUser = document.createElement('p'); 
-        pastUser.innerHTML = pastSaves[i].username + ' ' + pastSaves[i].userScore; 
-
-        //displays in answerDisplayId
-        answerDisplayId.append(pastUser); 
-      }
-    }
-  })
-}  
+                //displays in answerDisplayId
+                answerDisplayId.append(pastUser); 
+            });
+        }
+}
