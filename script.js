@@ -121,28 +121,32 @@ const endQuiz = () => {
     saveButton.addEventListener('click', (e) => { 
         e.preventDefault(); 
         //creates new save object
-        let save = { 
+        let newSave = { 
             userScore: score, 
             username: inputBox.value
         }
         
          //checks to see if there is a local storage already saved 
         //if not creates new array for previous saves to be stored
-        /*if(localStorage.getItem('save') === null){
+        if(localStorage.getItem('save') === null){
             let pastSaves = []; 
-            pastSaves.push(save); 
-            localStorage.setItem('save', JSON.stringify(save)); 
+            pastSaves.push(newSave); 
+            console.log('created and saved to new array');
+            localStorage.setItem('save', JSON.stringify(pastSaves)); 
         }
         //if saves are present pulls previous saves as an array, pushes new save
         //stringifies new save 
         else { 
+            console.log('saved to already existing array')
             let pastSaves = JSON.parse(localStorage.getItem('save')); 
-            pastSaves.push(save); 
+
+            console.log(pastSaves); 
+            pastSaves.push(newSave); 
             localStorage.setItem('save', JSON.stringify(pastSaves)); 
         }
 
         //clear inputBox
-        inputBox.value = ''; */
+        inputBox.value = ''; 
     
     }); 
 
