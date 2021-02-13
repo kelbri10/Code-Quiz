@@ -10,13 +10,20 @@ let countdown = 60;
 //when the user clicks start
 //the timer starts 
 //if the timer hits zero, the quiz ends 
+//referenced https://stackoverflow.com/questions/109086/stop-setinterval-call-in-javascript
 startBtn.addEventListener('click', ()=>{
+    const countdownTimer = () => { 
+        if(countdown >= 0){
+            timer.innerHTML = countdown; 
+            countdown--; 
+        } else { 
+            clearInterval(countdownID);  
+            endQuiz(); 
+        }
+    }
 
-    //timer counts down to 0 after user starts quiz 
-    setInterval(()=>{
-        timer.innerHTML = countdown; 
-        countdown--; 
-    }, 1000); 
+    //initializes countdownTimer function displaying timer countdown for user 
+    let countdownID = setInterval(countdownTimer, 1000); 
 
     //clears the quiz div and calls newQuiz function to display first question in array
     quiz.innerHTML = ''; 
@@ -25,10 +32,12 @@ startBtn.addEventListener('click', ()=>{
 
 //starts the quiz once user clicks start button 
 const newQuiz = (counter) => { 
+
     //create h1 tag for question 
     let newQuestion = document.createElement('h1'); 
     newQuestion.setAttribute('class', 'question-title'); 
 
+    //sets question display to be the current question
     newQuestion.innerHTML = questions[counter].title; 
     quiz.appendChild(newQuestion); 
 
@@ -47,13 +56,14 @@ const newQuiz = (counter) => {
             let userAnswer = newButton.dataset.ans;
             checkAnswer(userAnswer); 
         }); 
+
         quiz.append(newButton); 
     });
 
 }
 
 //once the user clicks a button, compare the clicked answer to the correct answer 
-const checkAnswer = (userAnswer) => { 
+const checkAnswer = (userAnswer, countdownID) => { 
     let correctAnswer = questions[counter].answer; 
     //checks if the users answer is the correct answer
     //score increase by 10 if correct, decreases by 10 if incorrect 
@@ -71,6 +81,7 @@ const checkAnswer = (userAnswer) => {
     //checks if counter supercedes number of questions available, ends quiz if true
     //continues quiz if more questions
     if (counter === questions.length){ 
+        clearInterval(countdownID); 
         endQuiz(); 
     } else { 
         newQuiz(counter); 
@@ -80,6 +91,7 @@ const checkAnswer = (userAnswer) => {
 
 //once quiz ends, ask user to enter initials in order to save score 
 const endQuiz = () => { 
+
     answer.innerHTML = ''; 
     quiz.innerHTML = 'Quiz Over!'; 
 
@@ -97,7 +109,7 @@ const endQuiz = () => {
     saveButton.setAttribute('class', 'btn'); 
     saveButton.innerHTML = 'Save'; 
 
-    //
+    //creates a button for view score
     let viewScore = document.createElement('button'); 
     viewScore.setAttribute('class', 'btn'); 
     viewScore.innerHTML = 'View Scores'; 
@@ -114,7 +126,23 @@ const endQuiz = () => {
             username: inputBox.value
         }
         
-        newSave(save); 
+         //checks to see if there is a local storage already saved 
+        //if not creates new array for previous saves to be stored
+        /*if(localStorage.getItem('save') === null){
+            let pastSaves = []; 
+            pastSaves.push(save); 
+            localStorage.setItem('save', JSON.stringify(save)); 
+        }
+        //if saves are present pulls previous saves as an array, pushes new save
+        //stringifies new save 
+        else { 
+            let pastSaves = JSON.parse(localStorage.getItem('save')); 
+            pastSaves.push(save); 
+            localStorage.setItem('save', JSON.stringify(pastSaves)); 
+        }
+
+        //clear inputBox
+        inputBox.value = ''; */
     
     }); 
 
@@ -122,35 +150,9 @@ const endQuiz = () => {
     viewScore.addEventListener('click', function(event){
         event.preventDefault(); 
 
-        viewHighscores(); 
-  });
-}
-
-    
-const newSave = (save) => { 
-    //checks to see if there is a local storage already saved 
-    //if not creates new array for previous saves to be stored
-    if(localStorage.getItem('save') === null){
-        let pastSaves = []; 
-        pastSaves.push(save); 
-        localStorage.setItem('save', JSON.stringify(save)); 
-    }
-    //if saves are present pulls previous saves as an array, pushes new save
-    //stringifies new save 
-    else { 
-        let pastSaves = JSON.parse(localStorage.getItem('save')); 
-        pastSaves.push(save); 
-        localStorage.setItem('save', JSON.stringify(pastSaves)); 
-    }
-
-    //clear inputBox
-    inputBox.value = ''; 
-}
-
-const viewHighscores = () => { 
-     //if the user clicks when there is no previous saves 
-     if (localStorage.getItem('save') === null){
-        answerDisplayId.innerHTML = 'There are no previous scores to display!'; 
+        //if the user clicks when there is no previous saves 
+        if (localStorage.getItem('save') === null){
+            answerDisplayId.innerHTML = 'There are no previous scores to display!'; 
         }
         else{ 
             //pulls array from local storage
@@ -166,4 +168,5 @@ const viewHighscores = () => {
                 answerDisplayId.append(pastUser); 
             });
         }
+  });
 }
